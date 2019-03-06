@@ -1,0 +1,34 @@
+type User {
+  _id: ID
+  name: String
+  email: String
+  role: String
+  refreshToken: String
+  accessToken: String
+}
+
+input signupInput {
+  name: String!
+  email: String!
+  password: String!
+}
+
+input signinInput {
+  email: String!
+  password: String!
+}
+
+type Query {
+  testQuery: String
+}
+
+type Mutation {
+  signUp(data: signupInput): User
+  signIn(data: signinInput): User
+  getToken(refreshToken: String!): User
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

@@ -1,0 +1,39 @@
+version: '3.1'
+
+services:
+  
+  api: 
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/opt/app:delegated
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      MONGO_URI: "mongodb://localhost/test_db"
+      JWT_SECRET: 123456
+      JWT_EXPIRATION_MINUTES: 60
+    ports:
+      - 3000:3000
+
+  mongo:
+    image: mongo
+    restart: always
+    command: mongod --storageEngine=wiredTiger
+    volumes:
+      - ./.docker/mongo-db:/data/db
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      ME_CONFIG_OPTIONS_EDITORTHEME: ambiance
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin2019
